@@ -1,486 +1,324 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Customer Manager Dashboard</title>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script type="module" src="app.js" defer></script>
-    <!-- Tailwind CSS utilities -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Custom styles -->
-    <link rel="stylesheet" href="style-dompro.css" />
-    <!-- Tailwind Configuration -->
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ["Plus Jakarta Sans", "sans-serif"],
-            },
+  <title>Customer Manager Dashboard</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script type="module" src="app.js" defer></script>
+  <!-- Tailwind CSS utilities -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="style-dompro.css" />
+  <!-- Tailwind Configuration -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Plus Jakarta Sans", "sans-serif"],
           },
         },
-      };
-    </script>
-  </head>
+      },
+    };
+  </script>
+</head>
 
-  <body class="min-h-screen bg-slate-50 font-sans text-slate-800 antialiased">
-    <!-- Top Navigation -->
-    <header class="border-b border-slate-200 bg-white">
+<body class="min-h-screen bg-slate-50 font-sans text-slate-800 antialiased">
+  <!-- Top Navigation -->
+  <header class="border-b border-slate-200 bg-white">
+    <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
+      <a href="#" class="flex items-center gap-3">
+        <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-violet-600 text-white shadow-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="10" cy="7" r="4" />
+            <path d="M20 8v6M23 11h-6" />
+          </svg>
+        </div>
+
+        <div>
+          <h1 class="text-lg font-bold tracking-tight text-slate-900 sm:text-xl">
+            Customer Manager
+          </h1>
+          <p class="text-xs text-slate-500 sm:text-sm">
+            Customer relationship workspace
+          </p>
+        </div>
+      </a>
+
+      <div class="hidden items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-2 sm:flex">
+        <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+        <span class="text-xs font-semibold text-emerald-700">Workspace active</span>
+      </div>
+
       <div
-        class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8"
-      >
-        <a href="#" class="flex items-center gap-3">
-          <div
-            class="flex h-11 w-11 items-center justify-center rounded-xl bg-violet-600 text-white shadow-sm"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
+        class="flex h-10 w-10 items-center justify-center rounded-full bg-violet-100 text-sm font-bold text-violet-700"
+        aria-label="Customer Manager workspace">
+        CM PRO
+      </div>
+    </div>
+  </header>
+
+  <!-- Dashboard Content -->
+  <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
+    <!-- Welcome Section -->
+    <section class="mb-8 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+      <div>
+        <p class="mb-2 text-sm font-semibold uppercase tracking-widest text-violet-600">
+          Dashboard
+        </p>
+
+        <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+          Manage your customers
+        </h2>
+
+        <p class="mt-3 max-w-2xl text-sm leading-6 text-slate-500 sm:text-base">
+          Add customer details, find existing records, and keep your customer
+          information organized in one place.
+        </p>
+      </div>
+
+      <a href="#customerForm"
+        class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-violet-700 focus:outline-none focus:ring-4 focus:ring-violet-200 sm:w-auto">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 5v14M5 12h14" />
+        </svg>
+
+        Add new customer
+      </a>
+    </section>
+
+    <!-- Overview Cards -->
+    <section class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-label="Customer dashboard overview">
+      <!-- Total Customers -->
+      <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <p class="text-sm font-medium text-slate-500">Customer records</p>
+            <p class="mt-2 text-2xl font-bold tracking-tight text-slate-900">
+              Live count
+            </p>
+            <p class="mt-1 text-xs text-slate-500">
+              See the matching customer count below.
+            </p>
+          </div>
+
+          <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-violet-100 text-violet-600">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+              aria-hidden="true">
               <path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
               <circle cx="10" cy="7" r="4" />
               <path d="M20 8v6M23 11h-6" />
             </svg>
           </div>
+        </div>
+      </article>
 
+      <!-- Search -->
+      <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md">
+        <div class="flex items-start justify-between gap-4">
           <div>
-            <h1
-              class="text-lg font-bold tracking-tight text-slate-900 sm:text-xl"
-            >
-              Customer Manager
-            </h1>
-            <p class="text-xs text-slate-500 sm:text-sm">
-              Customer relationship workspace
+            <p class="text-sm font-medium text-slate-500">Quick search</p>
+            <p class="mt-2 text-2xl font-bold tracking-tight text-slate-900">
+              Find records
+            </p>
+            <p class="mt-1 text-xs text-slate-500">
+              Search by customer name or email.
             </p>
           </div>
-        </a>
 
-        <div
-          class="hidden items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-2 sm:flex"
-        >
-          <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
-          <span class="text-xs font-semibold text-emerald-700"
-            >Workspace active</span
-          >
+          <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-sky-100 text-sky-600">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+              aria-hidden="true">
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.35-4.35" />
+            </svg>
+          </div>
         </div>
+      </article>
 
-        <div
-          class="flex h-10 w-10 items-center justify-center rounded-full bg-violet-100 text-sm font-bold text-violet-700"
-          aria-label="Customer Manager workspace"
-        >
-          CM
+      <!-- Contact Details -->
+      <article
+        class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md sm:col-span-2 lg:col-span-1">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <p class="text-sm font-medium text-slate-500">
+              Customer information
+            </p>
+            <p class="mt-2 text-2xl font-bold tracking-tight text-slate-900">
+              Organized
+            </p>
+            <p class="mt-1 text-xs text-slate-500">
+              Keep names and email addresses accessible.
+            </p>
+          </div>
+
+          <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+              aria-hidden="true">
+              <path d="M20 7h-9" />
+              <path d="M14 17H5" />
+              <circle cx="17" cy="17" r="3" />
+              <circle cx="7" cy="7" r="3" />
+            </svg>
+          </div>
         </div>
-      </div>
-    </header>
+      </article>
+    </section>
 
-    <!-- Dashboard Content -->
-    <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
-      <!-- Welcome Section -->
-      <section
-        class="mb-8 flex flex-col justify-between gap-5 sm:flex-row sm:items-end"
-      >
-        <div>
-          <p
-            class="mb-2 text-sm font-semibold uppercase tracking-widest text-violet-600"
-          >
-            Dashboard
-          </p>
-
-          <h2
-            class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl"
-          >
-            Manage your customers
-          </h2>
-
-          <p
-            class="mt-3 max-w-2xl text-sm leading-6 text-slate-500 sm:text-base"
-          >
-            Add customer details, find existing records, and keep your customer
-            information organized in one place.
-          </p>
-        </div>
-
-        <a
-          href="#customerForm"
-          class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-violet-700 focus:outline-none focus:ring-4 focus:ring-violet-200 sm:w-auto"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M12 5v14M5 12h14" />
-          </svg>
-
-          Add new customer
-        </a>
-      </section>
-
-      <!-- Overview Cards -->
-      <section
-        class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
-        aria-label="Customer dashboard overview"
-      >
-        <!-- Total Customers -->
-        <article
-          class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md"
-        >
-          <div class="flex items-start justify-between gap-4">
-            <div>
-              <p class="text-sm font-medium text-slate-500">Customer records</p>
-              <p class="mt-2 text-2xl font-bold tracking-tight text-slate-900">
-                Live count
-              </p>
-              <p class="mt-1 text-xs text-slate-500">
-                See the matching customer count below.
-              </p>
-            </div>
-
-            <div
-              class="flex h-12 w-12 items-center justify-center rounded-xl bg-violet-100 text-violet-600"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                <circle cx="10" cy="7" r="4" />
-                <path d="M20 8v6M23 11h-6" />
+    <!-- Main Dashboard Grid -->
+    <section class="grid grid-cols-1 items-start gap-6 lg:grid-cols-3">
+      <!-- Add Customer Form -->
+      <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm lg:col-span-1">
+        <div class="border-b border-slate-100 px-6 py-5">
+          <div class="flex items-center gap-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-100 text-violet-600">
+              <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                aria-hidden="true">
+                <path d="M12 5v14M5 12h14" />
               </svg>
             </div>
-          </div>
-        </article>
 
-        <!-- Search -->
-        <article
-          class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md"
-        >
-          <div class="flex items-start justify-between gap-4">
             <div>
-              <p class="text-sm font-medium text-slate-500">Quick search</p>
-              <p class="mt-2 text-2xl font-bold tracking-tight text-slate-900">
-                Find records
-              </p>
+              <h3 class="font-bold text-slate-900">Add a customer</h3>
               <p class="mt-1 text-xs text-slate-500">
-                Search by customer name or email.
+                Enter the customer's details
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <form id="customerForm" class="space-y-5 p-6">
+          <div>
+            <label for="name" class="mb-2 block text-sm font-semibold text-slate-700">
+              Customer name <span class="text-red-500">*</span>
+            </label>
+
+            <input id="name" name="name" type="text" placeholder="e.g. John Smith" autocomplete="name" required
+              class="block w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 hover:border-slate-400 focus:border-violet-500 focus:bg-white focus:ring-4 focus:ring-violet-100" />
+          </div>
+
+          <div>
+            <label for="email" class="mb-2 block text-sm font-semibold text-slate-700">
+              Email address <span class="text-red-500">*</span>
+            </label>
+
+            <input id="email" name="email" type="email" placeholder="e.g. john@example.com" autocomplete="email"
+              required
+              class="block w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 hover:border-slate-400 focus:border-violet-500 focus:bg-white focus:ring-4 focus:ring-violet-100" />
+          </div>
+
+          <button type="submit"
+            class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-5 py-3.5 text-sm font-semibold text-white shadow-sm transition duration-200 hover:bg-violet-700 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-violet-200 active:scale-[0.99]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+            Add customer
+          </button>
+
+          <p class="text-center text-xs leading-5 text-slate-400">
+            Fields marked with an asterisk (*) are required.
+          </p>
+        </form>
+      </div>
+
+      <!-- Customer Records -->
+      <div class="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm lg:col-span-2">
+        <!-- Records Header -->
+        <div class="border-b border-slate-100 px-5 py-5 sm:px-6">
+          <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">
+                Customer records
+              </h3>
+              <p class="mt-1 text-sm text-slate-500">
+                View and search your customer directory.
               </p>
             </div>
 
-            <div
-              class="flex h-12 w-12 items-center justify-center rounded-xl bg-sky-100 text-sky-600"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
+            <span
+              class="inline-flex w-fit items-center gap-2 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-600">
+              <span class="h-2 w-2 rounded-full bg-violet-500"></span>
+              Customer directory
+            </span>
+          </div>
+
+          <!-- Search Input -->
+          <div class="mt-5">
+            <label for="search" class="mb-2 block text-sm font-semibold text-slate-700">
+              Search customers
+            </label>
+
+            <div class="relative">
+              <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" aria-hidden="true">
                 <circle cx="11" cy="11" r="8" />
                 <path d="m21 21-4.35-4.35" />
               </svg>
+
+              <input id="search" type="search" placeholder="Search by name or email..." autocomplete="off"
+                class="block w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-violet-500 focus:bg-white focus:ring-4 focus:ring-violet-100" />
             </div>
           </div>
-        </article>
-
-        <!-- Contact Details -->
-        <article
-          class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md sm:col-span-2 lg:col-span-1"
-        >
-          <div class="flex items-start justify-between gap-4">
-            <div>
-              <p class="text-sm font-medium text-slate-500">
-                Customer information
-              </p>
-              <p class="mt-2 text-2xl font-bold tracking-tight text-slate-900">
-                Organized
-              </p>
-              <p class="mt-1 text-xs text-slate-500">
-                Keep names and email addresses accessible.
-              </p>
-            </div>
-
-            <div
-              class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M20 7h-9" />
-                <path d="M14 17H5" />
-                <circle cx="17" cy="17" r="3" />
-                <circle cx="7" cy="7" r="3" />
-              </svg>
-            </div>
-          </div>
-        </article>
-      </section>
-
-      <!-- Main Dashboard Grid -->
-      <section class="grid grid-cols-1 items-start gap-6 lg:grid-cols-3">
-        <!-- Add Customer Form -->
-        <div
-          class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm lg:col-span-1"
-        >
-          <div class="border-b border-slate-100 px-6 py-5">
-            <div class="flex items-center gap-3">
-              <div
-                class="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-100 text-violet-600"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="21"
-                  height="21"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="M12 5v14M5 12h14" />
-                </svg>
-              </div>
-
-              <div>
-                <h3 class="font-bold text-slate-900">Add a customer</h3>
-                <p class="mt-1 text-xs text-slate-500">
-                  Enter the customer's details
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <form id="customerForm" class="space-y-5 p-6">
-            <div>
-              <label
-                for="name"
-                class="mb-2 block text-sm font-semibold text-slate-700"
-              >
-                Customer name <span class="text-red-500">*</span>
-              </label>
-
-              <input
-                id="name"
-                name="name"
-                type="text"
-                placeholder="e.g. John Smith"
-                autocomplete="name"
-                required
-                class="block w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 hover:border-slate-400 focus:border-violet-500 focus:bg-white focus:ring-4 focus:ring-violet-100"
-              />
-            </div>
-
-            <div>
-              <label
-                for="email"
-                class="mb-2 block text-sm font-semibold text-slate-700"
-              >
-                Email address <span class="text-red-500">*</span>
-              </label>
-
-              <input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="e.g. john@example.com"
-                autocomplete="email"
-                required
-                class="block w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 hover:border-slate-400 focus:border-violet-500 focus:bg-white focus:ring-4 focus:ring-violet-100"
-              />
-            </div>
-
-            <button
-              type="submit"
-              class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-5 py-3.5 text-sm font-semibold text-white shadow-sm transition duration-200 hover:bg-violet-700 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-violet-200 active:scale-[0.99]"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M12 5v14M5 12h14" />
-              </svg>
-              Add customer
-            </button>
-
-            <p class="text-center text-xs leading-5 text-slate-400">
-              Fields marked with an asterisk (*) are required.
-            </p>
-          </form>
         </div>
 
-        <!-- Customer Records -->
-        <div
-          class="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm lg:col-span-2"
-        >
-          <!-- Records Header -->
-          <div class="border-b border-slate-100 px-5 py-5 sm:px-6">
-            <div
-              class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center"
-            >
-              <div>
-                <h3 class="text-lg font-bold text-slate-900">
-                  Customer records
-                </h3>
-                <p class="mt-1 text-sm text-slate-500">
-                  View and search your customer directory.
-                </p>
-              </div>
-
-              <span
-                class="inline-flex w-fit items-center gap-2 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-600"
-              >
-                <span class="h-2 w-2 rounded-full bg-violet-500"></span>
-                Customer directory
-              </span>
-            </div>
-
-            <!-- Search Input -->
-            <div class="mt-5">
-              <label
-                for="search"
-                class="mb-2 block text-sm font-semibold text-slate-700"
-              >
-                Search customers
-              </label>
-
-              <div class="relative">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="19"
-                  height="19"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
-                  aria-hidden="true"
-                >
-                  <circle cx="11" cy="11" r="8" />
-                  <path d="m21 21-4.35-4.35" />
-                </svg>
-
-                <input
-                  id="search"
-                  type="search"
-                  placeholder="Search by name or email..."
-                  autocomplete="off"
-                  class="block w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-violet-500 focus:bg-white focus:ring-4 focus:ring-violet-100"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- Record Count and Messages -->
-          <div
-            class="flex flex-col gap-2 border-b border-slate-100 bg-slate-50/70 px-5 py-4 sm:px-6"
-          >
-            <div class="flex items-center justify-between gap-3">
-              <p
-                class="text-xs font-bold uppercase tracking-wider text-slate-500"
-              >
-                Directory results
-              </p>
-
-              <p
-                id="resultCount"
-                aria-live="polite"
-                class="text-sm font-semibold text-violet-700"
-              ></p>
-            </div>
-
-            <p
-              id="message"
-              role="status"
-              aria-live="polite"
-              class="text-sm font-medium text-slate-600"
-            ></p>
-          </div>
-
-          <!-- Customer List -->
-          <div class="p-5 sm:p-6">
-            <ul id="customerList" class="space-y-3"></ul>
-
-            <noscript>
-              <p class="rounded-xl bg-amber-50 p-4 text-sm text-amber-800">
-                JavaScript must be enabled to manage customer records.
-              </p>
-            </noscript>
-          </div>
-
-          <!-- Records Footer -->
-          <div
-            class="border-t border-slate-100 bg-slate-50/70 px-5 py-4 sm:px-6"
-          >
-            <p class="text-xs leading-5 text-slate-500">
-              Customer information displayed here depends on the records managed
-              by your application.
+        <!-- Record Count and Messages -->
+        <div class="flex flex-col gap-2 border-b border-slate-100 bg-slate-50/70 px-5 py-4 sm:px-6">
+          <div class="flex items-center justify-between gap-3">
+            <p class="text-xs font-bold uppercase tracking-wider text-slate-500">
+              Directory results
             </p>
-          </div>
-        </div>
-      </section>
 
-      <!-- Footer -->
-      <footer class="mt-10 border-t border-slate-200 pt-6 text-center">
-        <p class="text-xs text-slate-400">
-          Customer Manager
-          <span class="mx-1.5">·</span>
-          Customer records and contact management
-        </p>
-      </footer>
-    </main>
-  </body>
+            <p id="resultCount" aria-live="polite" class="text-sm font-semibold text-violet-700"></p>
+          </div>
+
+          <p id="message" role="status" aria-live="polite" class="text-sm font-medium text-slate-600"></p>
+        </div>
+
+        <!-- Customer List -->
+        <div class="p-5 sm:p-6">
+          <ul id="customerList" class="space-y-3"></ul>
+
+          <noscript>
+            <p class="rounded-xl bg-amber-50 p-4 text-sm text-amber-800">
+              JavaScript must be enabled to manage customer records.
+            </p>
+          </noscript>
+        </div>
+
+        <!-- Records Footer -->
+        <div class="border-t border-slate-100 bg-slate-50/70 px-5 py-4 sm:px-6">
+          <p class="text-xs leading-5 text-slate-500">
+            Customer information displayed here depends on the records managed
+            by your application.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="mt-10 border-t border-slate-200 pt-6 text-center">
+      <p class="text-xs text-slate-400">
+        Customer Manager
+        <span class="mx-1.5">·</span>
+        Customer records and contact management
+      </p>
+    </footer>
+  </main>
+</body>
+
 </html>
