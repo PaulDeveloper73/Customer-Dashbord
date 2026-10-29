@@ -1,151 +1,319 @@
-const STORAGE_KEY = "customerStore";
 
-// 1. Get all previously saved customers
-const getCustomers = () => {
-    try {
-        const savedCustomers = JSON.parse(
-            localStorage.getItem(STORAGE_KEY) ?? "[]"
-        );
+const getCustomersData  =()=>{
+    try{
+        const records = JSON.parse(localStorage.getItem("customerData") ?? "[]")
+        if(!Array.isArray(records)){
+            throw  new Error("Customer data format is not compatible")
+        }
+        return records
 
-        return Array.isArray(savedCustomers) ? savedCustomers : [];
-    } catch (error) {
-        console.error("Failed to load customers:", error);
-        return [];
     }
-};
+    catch(error){
+        console.log("Failed to load the customer data!")
+        return []
 
-// 2. Save the complete customer array
-const storeCustomers = (customers) =>  localStorage.setItem(STORAGE_KEY, JSON.stringify(customers))
+    }
+    finally{
+        console.log("Processing saved customer details")
+    }
+}
+const storeCustomers = (availbaleCustomers,newRecord)=>{
+        const customerRecords = [
+            newRecord,
+            ...availbaleCustomers
+        ]
+        localStorage.setItem("customerData",JSON.stringify(customerRecords))
 
-// 3. Extract customer data from the form
-const getCustomerdata = (formDetails) => {
-    const formData = new FormData(formDetails);
-
-    return {
-        name: String(formData.get("customer-name") ?? "").trim(),
-        email: String(formData.get("customer-email") ?? "")
-            .trim()
-            .toLowerCase()
-    };
-};
-
-// 4. Display the available customers on the page
-const renderCustomers = (customers) => {
+    }
+const renderCustomers = (customers, { onEdit, onDelete } = {}) => {
     const customerList = document.querySelector("#customerList");
 
-    // Stop if the customer list element does not exist
-    if (!customerList) return;
+    // 1. Check whether the customer list container exists
+    if (!customerList) {
+        console.error("Customer list section not found!");
+        return;
+    }
 
-    // Remove previously displayed customers
-    customerList.replaceChildren();
+    // 2. Ensure customers is an array
+    if (!Array.isArray(customers)) {
+        console.error("Invalid customer data. Expected an array.");
+        return;
+    }
 
+    // 3. Create the table
+    const table = document.createElement("table");
+    table.className = "customer-table";
+    table.setAttribute("aria-label", "Customer list");
+
+    // 4. Create the table header
+    const thead = document.createElement("thead");
+    const headerRow = document.createElement("tr");
+
+    ["Initials", "Customer Name", "Email Address", "Actions"].forEach(
+        (heading) => {
+            const th = document.createElement("th");
+            th.scope = "col";
+            th.textContent = heading;
+            headerRow.appendChild(th);
+        }
+    );
+
+    thead.appendChild(headerRow);
+
+    // 5. Create the table body
+    const tbody = document.createElement("tbody");
+
+    // Display a message when there are no customers
     if (customers.length === 0) {
-        const emptyMessage = document.createElement("li");
-        emptyMessage.textContent = "No customers available yet.";
-        customerList.append(emptyMessage);
-        return;
-    }
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
 
-    // Display every customer
-    customers.map((customer) => {
-        const listItem = document.createElement("li");
+        cell.colSpan = 4;
+        cell.textContent = "No customers available.";
+        cell.className = "empty-state";
 
-        listItem.textContent = `${customer.name} — ${customer.email}`;
+        row.appendChild(cell);
+        tbody.appendChild(row);
+    } else {
+        // 6. Generate a row for each customer
+        customers.forEach((customer) => {
+            const row = document.createElement("tr");
 
-        customerList.append(listItem);
-    });
-};
+            // Customer data with safe fallbacks
+            const customerId = customer.id ?? "";
+            const customerName =
+                String(customer.name ?? "").trim() || "Unknown customer";
 
-// 5. Initialize the customer application
-const initApp = () => {
-    const customerForm = document.querySelector("#customerForm");
-    const customerName = document.querySelector("#customer-name");
-    const customerEmail = document.querySelector("#customer-email");
-    const errMsg = document.querySelector("#err-msg");
+            const customerEmail =
+                String(customer.email ?? "").trim() || "No email provided";
 
-    // Load saved customers when the page opens
-    let availableCustomers = getCustomers();
+            // 7. Generate the customer abbreviation
+            const nameParts = customerName.split(/\s+/);
 
-    // Display the existing customers immediately
-    renderCustomers(availableCustomers);
+          const firstInitial = nameParts[0]?.[0] ?? "";
 
-    if (!customerForm) {
-        console.error("Customer form was not found.");
-        return;
-    }
+const lastName = nameParts.length > 1
+    ? nameParts[nameParts.length - 1]
+    : "";
 
-    // 6. Listen for new customer submissions
-    customerForm.addEventListener("submit", (event) => {
-        event.preventDefault();
+const lastInitial = lastName[0] ?? "";
 
-        errMsg.textContent = "";
+// First letter of first name + first letter of last name
+const abbreviation = (
+    firstInitial + lastInitial
+).toUpperCase();
+            // Initials cell
+            const initialsCell = document.createElement("td");
+            const initialsBadge = document.createElement("span");
 
-        // Get the incoming customer
-        const customer = getCustomerdata(customerForm);
+            initialsBadge.className = "customer-avatar";
+            initialsBadge.textContent = abbreviation || "?";
+            initialsBadge.setAttribute(
+                "aria-label",
+                `Customer initials: ${abbreviation || "unknown"}`
+            );
 
-        // Validate required fields
-        if (!customer.name || !customer.email) {
-            errMsg.textContent = "Name and email are required!";
+            initialsCell.appendChild(initialsBadge);
 
-            if (!customer.name) {
-                customerName.focus();
-            } else {
-                customerEmail.focus();
+            // Customer name cell
+            const nameCell = document.createElement("td");
+            const nameElement = document.createElement("p");
+
+            nameElement.className = "customer-name";
+            nameElement.textContent = customerName;
+
+            nameCell.appendChild(nameElement);
+
+            // Email cell
+            const emailCell = document.createElement("td");
+
+            emailCell.textContent = customerEmail;
+
+            // 8. Create the actions cell
+            const actionsCell = document.createElement("td");
+            actionsCell.className = "customer-actions";
+
+            // Edit button
+            const editButton = document.createElement("button");
+
+            editButton.type = "button";
+            editButton.textContent = "Edit";
+            editButton.className = "customer-edit-btn";
+            editButton.setAttribute(
+                "aria-label",
+                `Edit ${customerName}`
+            );
+
+            editButton.addEventListener("click", () => {
+                if (typeof onEdit === "function") {
+                    onEdit(customer);
+                } else {
+                    customerList.dispatchEvent(
+                        new CustomEvent("customer:edit", {
+                            bubbles: true,
+                            detail: customer
+                        })
+                    );
+                }
+            });
+
+            // Delete button
+            const deleteButton = document.createElement("button");
+
+            deleteButton.type = "button";
+            deleteButton.textContent = "Delete";
+            deleteButton.className = "customer-delete-btn";
+            deleteButton.setAttribute(
+                "aria-label",
+                `Delete ${customerName}`
+            );
+
+            deleteButton.addEventListener("click", () => {
+                if (typeof onDelete === "function") {
+                    onDelete(customer);
+                } else {
+                    customerList.dispatchEvent(
+                        new CustomEvent("customer:delete", {
+                            bubbles: true,
+                            detail: customer
+                        })
+                    );
+                }
+            });
+
+            // Add buttons to the actions cell
+            actionsCell.append(editButton, deleteButton);
+
+            // 9. Add all cells to the row
+            row.append(
+                initialsCell,
+                nameCell,
+                emailCell,
+                actionsCell
+            );
+
+            // Store the ID on the row if available
+            if (customer.id != null) {
+                row.dataset.customerId = String(customerId);
             }
 
-            return;
-        }
+            // Add the row to the table body
+            tbody.appendChild(row);
+        });
+    }
 
-        // Reload the latest saved array before checking for duplicates
-        availableCustomers = getCustomers();
+    // 10. Assemble and render the completed table
+    table.append(thead, tbody);
 
-        // Check whether the email already exists
-        const customerExists = availableCustomers.some(
-            (existingCustomer) =>
-                existingCustomer.email?.trim().toLowerCase() ===
-                customer.email
-        );
+    // Replace old content instead of duplicating the table
+    customerList.replaceChildren(table);
 
-        if (customerExists) {
-            errMsg.textContent =
-                "A customer with this email already exists.";
-errMsg.classList.toggle("hidden")
-            customerEmail.focus();
-            return;
-        }
-
-        // Append the incoming customer to the existing array
-        const allCustomers = [
-            ...availableCustomers,
-            customer
-        ];
-
-        // Save the complete list
-        storeCustomers(allCustomers);
-
-        // Update the in-memory customer list
-        availableCustomers = allCustomers;
-
-        // Refresh the displayed list immediately
-        renderCustomers(availableCustomers);
-
-        // Provide feedback and clear the form
-        errMsg.textContent = "Customer added successfully!";
-
-        customerForm.reset();
-        customerName.focus();
-
-        console.log("All customers:", availableCustomers);
-    });
-
-    // 7. Refresh the list if another tab changes localStorage
-    window.addEventListener("storage", (event) => {
-        if (event.key === STORAGE_KEY || event.key === null) {
-            availableCustomers = getCustomers();
-            renderCustomers(availableCustomers);
-        }
-    });
+    return table;
 };
+const getCustomers  = (newUserDetails)=>{
+    const form =  new FormData(newUserDetails)
+    return{
+        name: String(form.get("customer-name") ?? "").trim(),
+        email: String(form.get("customer-email") ?? "").trim().toLowerCase()
+    }
+}
 
-// 8. Start after the HTML has been parsed
-document.addEventListener("DOMContentLoaded", initApp);
+const initApp = ()=>{
+    // Add an event listener to the form
+    const customerForm =  document.querySelector("#customerForm")
+    const customerName=  document.querySelector("#customer-name")
+    const customerEmail=  document.querySelector("#customer-email")
+    const errMsg=  document.querySelector("#err-msg")
+    const submitBtn=  document.querySelector("#submit-btn")
+    errMsg.textContent = ""
+    let availbaleCustomers= getCustomersData()
+    console.log(availbaleCustomers)
+    // ** Render available customers
+    renderCustomers(availbaleCustomers)
+    // validate customer form
+    if (!customerForm) {
+        console.log("Customer form not found!")
+        return        
+    }
+    customerForm.addEventListener('submit',(e)=>{
+        e.preventDefault()
+        const customer =  getCustomers(customerForm)
+        console.log(customer)
+        // Check if all fields have data
+        if (!customer.name || !customer.email) {
+            errMsg.textContent = "Name and Email Address are required."
+            errMsg.classList.toggle("hidden")
+            if (!customer.name) {
+                customerName.focus()
+                
+            }
+            if (!customer.email) {
+                customerEmail.focus()
+                
+            }
+            return
+            
+        }
+        
+        // check if  user already exists
+        const existingUser  = availbaleCustomers.some(user=>user.email.toLowerCase().trim() === customer.email)
+        if (existingUser) {
+          errMsg.textContent = "Customer with this email already exists!"
+          errMsg.classList.toggle("hidden")
+          customerEmail.focus()
+            return       
+        }
+        else{
+            // Save user
+   submitBtn.textContent = "Processing..."
+
+   submitBtn.disabled=true;
+   customerForm.disabled=true;
+   submitBtn.style.cursor = "wait"
+   submitBtn.style.opacity = ".4"
+   submitBtn.classList.add("animate-pulse")
+            setTimeout(()=>{
+
+                errMsg.textContent = "Customer saved sucessfully"
+                         errMsg.classList.remove("hidden")
+                         errMsg.classList.remove("text-red-700","bg-red-50")
+                         errMsg.classList.add("text-green-700","bg-green-50")
+                           submitBtn.disabled=true;
+   submitBtn.style.cursor = "pointer"
+   submitBtn.style.opacity = "1"
+   submitBtn.disabled=false;
+   customerForm.disabled=false;
+   submitBtn.textContent = "Add Customer"
+
+    submitBtn.classList.remove("animate-pulse")
+                          customerForm.reset()
+                         customerName.focus()
+                         if (errMsg.classList.contains("text-green-700")) {
+                             
+                             setTimeout(() => {
+                                              errMsg.classList.add("hidden")
+                                 
+                             }, 4000);
+                         }
+            },3000)
+        }
+
+        // Store customer records to local storage
+        storeCustomers(availbaleCustomers,customer)
+        // refresh the  customer list
+           availbaleCustomers =  getCustomersData()
+        //    Render the customer data
+         renderCustomers(availbaleCustomers)
+        //  reset form
+        
+    })
+
+
+
+
+}
+
+
+window.addEventListener('load',()=>{
+    initApp()
+})
