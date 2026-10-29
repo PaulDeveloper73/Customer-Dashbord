@@ -6,8 +6,16 @@
     --red:#860909;
     --deep-red:#4b0303;
 }
-.customer-table{
-    background-color: hsla(0, 0%, 80%, 0.08)
+#customerList {
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.customer-table {
+    width: 100%;
+    background-color: hsla(0, 0%, 80%, 0.08);
+    border-collapse: collapse;
 }
 
 .customer-table th{
@@ -22,7 +30,7 @@ background-color: hsl(var(--primary) / 30%);
     padding: 10px;
     border-radius: 50%;
     font-size: 12px;
-    color: hsl(var(--primary) / 40%);
+    color: hsl(var(--primary) / 60%);
     font-weight: 900;
 
     
@@ -33,7 +41,7 @@ padding: 10px!important;
 
 }
 .customer-table tbody tr:nth-child(even){ 
-    background-color: hsl(var(--primary) / 10%);
+    background-color: hsl(var(--primary) / 7%);
 
 }
 .customer-table tbody tr:nth-child(odd){ 
@@ -41,12 +49,12 @@ padding: 10px!important;
 
 }
 .customer-table tbody tr:nth-child(even):hover{ 
-    background-color: hsl(var(--primary) / 40%);
+    background-color: hsl(var(--primary) / 20%);
     cursor: pointer;
 
 }
 .customer-table tbody tr:nth-child(odd):hover{ 
-    background-color: hsl(var(--primary) / 40%);
+    background-color: hsl(var(--primary) / 20%);
 
 }
 .customer-table .customer-edit-btn{
@@ -71,4 +79,10 @@ padding: 10px!important;
  font-size: 13px;
  border-radius: 10px;
 
+}
+
+#search-label-wrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }

@@ -164,6 +164,7 @@ const abbreviation = (
             deleteButton.type = "button";
             deleteButton.textContent = "Delete";
             deleteButton.className = "customer-delete-btn";
+            deleteButton.id= `${customers.emai}`
             deleteButton.setAttribute(
                 "aria-label",
                 `Delete ${customerName}`
@@ -218,6 +219,38 @@ const getCustomers  = (newUserDetails)=>{
         email: String(form.get("customer-email") ?? "").trim().toLowerCase()
     }
 }
+// * GLobal customer searching
+const customerGlobalSearch = (dataSource,query)=>{
+    const searchTerm = query.trim().toLowerCase()
+    if (!searchTerm || searchTerm === null) {
+        console.log("Please enter what you want to seach.")
+        renderCustomers(dataSource)
+        return dataSource  
+    }
+
+    const searchResult = dataSource.filter(user=>{
+        const name = String(user.name.toLowerCase().trim() ?? "")
+        const email =  String(user.email.toLowerCase().trim() ?? "")
+
+        return(
+        name.includes(searchTerm)|| email.includes(searchTerm)
+        )
+    })
+
+    if (searchResult.length <= 0) {
+    // loadingMessage.textContent = 'No Data Available!, Try Again!'
+    // console.log("No data available...")
+  } else {
+    // loadingMessage.textContent = 'Loading Invoices...'
+    // console.log("Loading data...")
+
+  }
+  const customerResults = searchResult.length > 0 ? searchResult : []
+  renderCustomers(customerResults)
+  return customerResults
+}
+
+
 
 const initApp = ()=>{
     // Add an event listener to the form
@@ -226,8 +259,11 @@ const initApp = ()=>{
     const customerEmail=  document.querySelector("#customer-email")
     const errMsg=  document.querySelector("#err-msg")
     const submitBtn=  document.querySelector("#submit-btn")
+    const searchBtn=  document.querySelector("#search")
+    const availableRecords =  document.querySelector("#available-records")
     errMsg.textContent = ""
     let availbaleCustomers= getCustomersData()
+    availableRecords.textContent = `${availbaleCustomers.length}  Matching records.`
     console.log(availbaleCustomers)
     // ** Render available customers
     renderCustomers(availbaleCustomers)
@@ -236,6 +272,12 @@ const initApp = ()=>{
         console.log("Customer form not found!")
         return        
     }
+    // Manage user search
+    searchBtn?.addEventListener('keyup',(e)=>{
+       const customerSearchedRecords =  customerGlobalSearch(availbaleCustomers,e.target.value)
+        availableRecords.textContent = `${customerSearchedRecords.length}  Matching records.`
+
+    })
     customerForm.addEventListener('submit',(e)=>{
         e.preventDefault()
         const customer =  getCustomers(customerForm)
@@ -255,9 +297,10 @@ const initApp = ()=>{
             return
             
         }
-        
+        // refresh the list here...
+         availbaleCustomers= getCustomersData()
         // check if  user already exists
-        const existingUser  = availbaleCustomers.some(user=>user.email.toLowerCase().trim() === customer.email)
+        const existingUser  = availbaleCustomers.find(user=>user.email.toLowerCase().trim() === customer.email)
         if (existingUser) {
           errMsg.textContent = "Customer with this email already exists!"
           errMsg.classList.toggle("hidden")
@@ -276,7 +319,6 @@ const initApp = ()=>{
    submitBtn.style.opacity = ".4"
    submitBtn.classList.add("animate-pulse")
             setTimeout(()=>{
-
                 errMsg.textContent = "Customer saved sucessfully"
                          errMsg.classList.remove("hidden")
                          errMsg.classList.remove("text-red-700","bg-red-50")
@@ -296,20 +338,23 @@ const initApp = ()=>{
                              setTimeout(() => {
                                               errMsg.classList.add("hidden")
                                                errMsg.classList.remove("text-red-700","bg-red-50")
-                                 
-                             }, 4000);
-                         }
-            },3000)
-        }
+                                               
+                                            }, 4000);
+                                        }
+                                    },3000)
+                                }
+                                
+                                
+                                
+                                // Store customer records to local storage
+storeCustomers(availbaleCustomers,customer)
+// refresh the  customer list
+availbaleCustomers =  getCustomersData()
+//    Render the customer data
+renderCustomers(availbaleCustomers)
+ availableRecords.textContent = `${availbaleCustomers.length}  Matching records.`
 
-        // Store customer records to local storage
-        storeCustomers(availbaleCustomers,customer)
-        // refresh the  customer list
-           availbaleCustomers =  getCustomersData()
-        //    Render the customer data
-         renderCustomers(availbaleCustomers)
-        //  reset form
-        
+                                
     })
 
 

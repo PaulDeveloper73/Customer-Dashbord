@@ -241,27 +241,21 @@
       <div class="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm lg:col-span-2">
         <!-- Records Header -->
         <div class="border-b border-slate-100 px-5 py-5 sm:px-6">
-          <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-            <div>
-              <h3 class="text-lg font-bold text-slate-900">
-                Customer records
-              </h3>
-              <p class="mt-1 text-sm text-slate-500">
-                View and search your customer directory.
-              </p>
-            </div>
 
-            <span
-              class="inline-flex w-fit items-center gap-2 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-600">
-              <span class="h-2 w-2 rounded-full bg-violet-500"></span>
-              Customer directory
-            </span>
-          </div>
 
           <!-- Search Input -->
           <div class="mt-5">
-            <label for="search" class="mb-2 block text-sm font-semibold text-slate-700">
-              Search customers
+            <label for="search" id="search-label-wrapper"
+              class="mb-2 block text-sm font-semibold text-slate-700 flex space-between item-center">
+              <span id="searchme">Search customers</span>
+
+              <span class="p-2 font-normal text-xs rounded-full text-green-700 border border-white"
+                id="available-records">
+
+
+
+
+              </span>
             </label>
 
             <div class="relative">
@@ -278,18 +272,7 @@
           </div>
         </div>
 
-        <!-- Record Count and Messages -->
-        <div class="flex flex-col gap-2 border-b border-slate-100 bg-slate-50/70 px-5 py-4 sm:px-6">
-          <div class="flex items-center justify-between gap-3">
-            <p class="text-xs font-bold uppercase tracking-wider text-slate-500">
-              Directory results
-            </p>
 
-            <p id="resultCount" aria-live="polite" class="text-sm font-semibold text-violet-700"></p>
-          </div>
-
-          <p id="message" role="status" aria-live="polite" class="text-sm font-medium text-slate-600"></p>
-        </div>
 
         <!-- Customer List -->
         <div class="p-5 sm:p-6">
