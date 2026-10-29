@@ -1,0 +1,74 @@
+
+:root{
+    --primary:262 83% 58%;
+    --dark:#000;
+    --white:#fff ; 
+    --red:#860909;
+    --deep-red:#4b0303;
+}
+.customer-table{
+    background-color: hsla(0, 0%, 80%, 0.08)
+}
+
+.customer-table th{
+font-weight: 600;    
+padding: 10px;
+border-bottom: 1px solid #ccc;
+background-color: hsl(var(--primary) / 30%);
+}
+.customer-table .customer-avatar{
+   color: hsl(var(--primary) / 10%); 
+    
+    padding: 10px;
+    border-radius: 50%;
+    font-size: 12px;
+    color: hsl(var(--primary) / 40%);
+    font-weight: 900;
+
+    
+    
+}
+.customer-table tbody tr td{ 
+padding: 10px!important;
+
+}
+.customer-table tbody tr:nth-child(even){ 
+    background-color: hsl(var(--primary) / 10%);
+
+}
+.customer-table tbody tr:nth-child(odd){ 
+    background-color: hsl(var(--primary) / 1%);
+
+}
+.customer-table tbody tr:nth-child(even):hover{ 
+    background-color: hsl(var(--primary) / 40%);
+    cursor: pointer;
+
+}
+.customer-table tbody tr:nth-child(odd):hover{ 
+    background-color: hsl(var(--primary) / 40%);
+
+}
+.customer-table .customer-edit-btn{
+ background-color: hsl(var(--primary) / 60%);
+}
+.customer-table .customer-edit-btn:hover{
+ background-color: hsl(var(--primary) / 100%);
+}
+.customer-table .customer-delete-btn{
+ background-color:var(--red);
+}
+.customer-table .customer-delete-btn:hover{
+ background-color:var(--deep-red);
+}
+.customer-actions{
+    display: flex;
+    gap: 10px;
+}
+.customer-actions button{
+ padding: 2px 20px;
+ color: #fff;
+ font-size: 13px;
+ border-radius: 10px;
+
+}

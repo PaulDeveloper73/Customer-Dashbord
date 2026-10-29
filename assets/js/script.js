@@ -43,6 +43,7 @@ const renderCustomers = (customers, { onEdit, onDelete } = {}) => {
     // 3. Create the table
     const table = document.createElement("table");
     table.className = "customer-table";
+    table.classList.add("w-full","table")
     table.setAttribute("aria-label", "Customer list");
 
     // 4. Create the table header
@@ -260,6 +261,8 @@ const initApp = ()=>{
         if (existingUser) {
           errMsg.textContent = "Customer with this email already exists!"
           errMsg.classList.toggle("hidden")
+            errMsg.classList.add("text-red-700","bg-red-50")
+                         errMsg.classList.remove("text-green-700","bg-green-50")
           customerEmail.focus()
             return       
         }
@@ -292,6 +295,7 @@ const initApp = ()=>{
                              
                              setTimeout(() => {
                                               errMsg.classList.add("hidden")
+                                               errMsg.classList.remove("text-red-700","bg-red-50")
                                  
                              }, 4000);
                          }
