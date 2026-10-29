@@ -130,61 +130,164 @@ const abbreviation = (
 
             emailCell.textContent = customerEmail;
 
-            // 8. Create the actions cell
-            const actionsCell = document.createElement("td");
-            actionsCell.className = "customer-actions";
+        // 8. Create the actions cell
+const actionsCell = document.createElement("td");
+actionsCell.className = "customer-actions";
 
-            // Edit button
-            const editButton = document.createElement("button");
+// Get the current customer's unique email
+const customerEmailPro = String(customer.email ?? "").trim();
+const encodedEmail = encodeURIComponent(customerEmailPro);
 
-            editButton.type = "button";
-            editButton.textContent = "Edit";
-            editButton.className = "customer-edit-btn";
-            editButton.setAttribute(
-                "aria-label",
-                `Edit ${customerName}`
-            );
+// Ensure every customer has a unique email
+if (!customerEmailPro) {
+    throw new Error("Cannot create customer action buttons without an email.");
+}
 
-            editButton.addEventListener("click", () => {
-                if (typeof onEdit === "function") {
-                    onEdit(customer);
-                } else {
-                    customerList.dispatchEvent(
-                        new CustomEvent("customer:edit", {
-                            bubbles: true,
-                            detail: customer
-                        })
-                    );
-                }
-            });
+// --------------------------------------------------
+// 9. Create the Edit button
+// --------------------------------------------------
+const editButton = document.createElement("button");
 
-            // Delete button
-            const deleteButton = document.createElement("button");
+editButton.type = "button";
+editButton.textContent = "Edit";
+editButton.className = "customer-edit-btn";
 
-            deleteButton.type = "button";
-            deleteButton.textContent = "Delete";
-            deleteButton.className = "customer-delete-btn";
-            deleteButton.id= `${customers.emai}`
-            deleteButton.setAttribute(
-                "aria-label",
-                `Delete ${customerName}`
-            );
+// Unique ID for this customer's Edit button
+editButton.id = `edit-customer-${encodedEmail}`;
 
-            deleteButton.addEventListener("click", () => {
-                if (typeof onDelete === "function") {
-                    onDelete(customer);
-                } else {
-                    customerList.dispatchEvent(
-                        new CustomEvent("customer:delete", {
-                            bubbles: true,
-                            detail: customer
-                        })
-                    );
-                }
-            });
+editButton.setAttribute("aria-label", `Edit ${customerName}`);
 
-            // Add buttons to the actions cell
-            actionsCell.append(editButton, deleteButton);
+// Handle clicks on this specific Edit button
+editButton.addEventListener("click", (event) => {
+    // Get the ID of the button the user actually clicked
+    const clickedButtonId = event.currentTarget.id;
+    
+    // Extract and decode the customer's email from the ID
+    const clickedEmail = decodeURIComponent(
+        clickedButtonId.slice("edit-customer-".length)
+    ).trim().toLowerCase();
+    
+    // Find the correct customer in the complete customer array
+  
+    const selectedCustomer = customers.find(
+        (item) =>
+            String(item.email ?? "").trim().toLowerCase() === clickedEmail
+    );
+
+    if (!selectedCustomer) {
+        console.error("Customer not found for Edit:", clickedEmail);
+        return;
+    }
+    handleUserUpdate(selectedCustomer,customers)
+
+    // Run the Edit callback or dispatch a custom event
+    if (typeof onEdit === "function") {
+        onEdit(selectedCustomer);
+    } else {
+        customerList.dispatchEvent(
+            new CustomEvent("customer:edit", {
+                bubbles: true,
+                detail: selectedCustomer
+            })
+        );
+    }
+});
+
+// --------------------------------------------------
+// 10. Create the Delete button
+// --------------------------------------------------
+const deleteButton = document.createElement("button");
+
+deleteButton.type = "button";
+deleteButton.textContent = "Delete";
+deleteButton.className = "customer-delete-btn";
+
+// Unique ID for this customer's Delete button
+deleteButton.id = `delete-customer-${encodedEmail}`;
+
+deleteButton.setAttribute("aria-label", `Delete ${customerName}`);
+let clearInterVal;
+// Handle clicks on this specific Delete button
+deleteButton.addEventListener("click", (event) => {
+    const updateMsg = document.querySelector("#update-msg")
+     const availableRecords =  document.querySelector("#available-records")
+    clearTimeout(clearInterVal)
+    // Get the ID of the button the user actually clicked
+    const clickedButtonId = event.currentTarget.id;
+
+    // Extract and decode the customer's email from the ID
+    const clickedEmail = decodeURIComponent(
+        clickedButtonId.slice("delete-customer-".length)
+    ).trim().toLowerCase();
+
+    // Find the correct customer in the complete customer array
+    const selectedCustomer = customers.filter(
+        (item) =>
+            String(item.email ?? "").trim().toLowerCase() !== clickedEmail
+    );
+
+    if (!selectedCustomer) {
+        console.error("Customer not found for Delete:", clickedEmail);
+        return;
+    }
+       updateMsg.textContent ="Deleted the user Sucessfully!"
+        updateMsg.classList.remove("hidden")
+        updateMsg.classList.add("flex")
+    availableRecords.textContent = `${selectedCustomer.length}  Matching records.`
+
+  clearInterVal=setTimeout(() => {
+        
+        updateMsg.textContent =" "
+        updateMsg.classList.add("hidden")
+        updateMsg.classList.remove("flex")
+    }, 3500);
+    renderCustomers(selectedCustomer)
+
+    
+
+    // Run the Delete callback or dispatch a custom event
+    if (typeof onDelete === "function") {
+        onDelete(selectedCustomer);
+    } else {
+        customerList.dispatchEvent(
+            new CustomEvent("customer:delete", {
+                bubbles: true,
+                detail: selectedCustomer
+            })
+        );
+    }
+});
+const handleUserUpdate = (userDetails,dataSource)=>{
+      // Add an event listener to the form
+    const customerForm =  document.querySelector("#customerForm")
+    const customerName=  document.querySelector("#customer-name")
+    const customerEmail=  document.querySelector("#customer-email")
+    const errMsg=  document.querySelector("#err-msg")
+    const submitBtn=  document.querySelector("#submit-btn")
+    const formStatus=  document.querySelector("#form-status")
+    const filteredUser = dataSource?.filter(user=>user.email===userDetails)
+    if (!filteredUser) {
+        console.log("User does not exist!")
+        return        
+    }
+    if (!customerForm) {
+        console.log("Form not found!!")
+        return        
+    }
+    // created aguiding if
+     formStatus.textContent ="update"
+    customerName.textContent
+    customerName.value = userDetails.name
+    customerEmail.value = userDetails.email
+    submitBtn.textContent="Update Customer"
+    console.log(userDetails)
+   
+
+}
+// --------------------------------------------------
+// 11. Add both buttons to the actions cell
+// --------------------------------------------------
+actionsCell.append(editButton, deleteButton);
 
             // 9. Add all cells to the row
             row.append(
@@ -219,7 +322,8 @@ const getCustomers  = (newUserDetails)=>{
         email: String(form.get("customer-email") ?? "").trim().toLowerCase()
     }
 }
-// * GLobal customer searching
+// * hhvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv   
+//  customer searching
 const customerGlobalSearch = (dataSource,query)=>{
     const searchTerm = query.trim().toLowerCase()
     if (!searchTerm || searchTerm === null) {
@@ -261,6 +365,11 @@ const initApp = ()=>{
     const submitBtn=  document.querySelector("#submit-btn")
     const searchBtn=  document.querySelector("#search")
     const availableRecords =  document.querySelector("#available-records")
+      const formStatus=  document.querySelector("#form-status")
+      if (formStatus==="update") {
+        console,log("Updating user records in progress...")
+        return        
+      }
     errMsg.textContent = ""
     let availbaleCustomers= getCustomersData()
     availableRecords.textContent = `${availbaleCustomers.length}  Matching records.`
