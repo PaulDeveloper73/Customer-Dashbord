@@ -6,6 +6,14 @@
     --red:#860909;
     --deep-red:#4b0303;
 }
+html {
+    scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+}
 #customerList {
     max-height: 300px;
     overflow-y: auto;
@@ -14,7 +22,8 @@
 
 .customer-table {
     width: 100%;
-    background-color: hsla(0, 0%, 80%, 0.08);
+      background-color: hsl(var(--white) / 100%);
+
     border-collapse: collapse;
 }
 
@@ -41,11 +50,11 @@ padding: 10px!important;
 
 }
 .customer-table tbody tr:nth-child(even){ 
-    background-color: hsl(var(--primary) / 7%);
+    background-color: hsl(var(--primary) / 5%);
 
 }
 .customer-table tbody tr:nth-child(odd){ 
-    background-color: hsl(var(--primary) / 1%);
+    background-color: hsl(var(--white) / 100%);
 
 }
 .customer-table tbody tr:nth-child(even):hover{ 

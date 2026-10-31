@@ -103,21 +103,16 @@
           <div>
             <p class="text-sm font-medium text-slate-500">Customer records</p>
             <p class="mt-2 text-2xl font-bold tracking-tight text-slate-900">
-              Live count
+              Total Customers
             </p>
-            <p class="mt-1 text-xs text-slate-500">
-              See the matching customer count below.
-            </p>
+
           </div>
 
           <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-violet-100 text-violet-600">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
-              aria-hidden="true">
-              <path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="10" cy="7" r="4" />
-              <path d="M20 8v6M23 11h-6" />
-            </svg>
+            <p class="mt-1 text-xl font-bold text-slate-500" id="total-customers">
+              0
+            </p>
+
           </div>
         </div>
       </article>
@@ -130,18 +125,19 @@
             <p class="mt-2 text-2xl font-bold tracking-tight text-slate-900">
               Find records
             </p>
-            <p class="mt-1 text-xs text-slate-500">
-              Search by customer name or email.
-            </p>
+
           </div>
 
           <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-sky-100 text-sky-600">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
-              aria-hidden="true">
-              <circle cx="11" cy="11" r="8" />
-              <path d="m21 21-4.35-4.35" />
-            </svg>
+
+            <a href="#search">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                aria-hidden="true">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.35-4.35" />
+              </svg>
+            </a>
           </div>
         </div>
       </article>
@@ -157,9 +153,7 @@
             <p class="mt-2 text-2xl font-bold tracking-tight text-slate-900">
               Organized
             </p>
-            <p class="mt-1 text-xs text-slate-500">
-              Keep names and email addresses accessible.
-            </p>
+
           </div>
 
           <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600">
@@ -252,10 +246,6 @@
 
               <span class="p-2 font-normal text-xs rounded-full text-green-700 border border-white"
                 id="available-records">
-
-
-
-
               </span>
             </label>
             <p id="update-msg"

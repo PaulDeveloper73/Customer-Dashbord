@@ -1,4 +1,4 @@
-
+import processUserDetails from "./processuserdetails.js"
 const getCustomersData  =()=>{
     try{
         const records = JSON.parse(localStorage.getItem("customerData") ?? "[]")
@@ -275,8 +275,7 @@ const handleUserUpdate = (userDetails,dataSource)=>{
         return        
     }
     // created aguiding if
-     formStatus.textContent ="update"
-    customerName.textContent
+     formStatus.value ="update"
     customerName.value = userDetails.name
     customerEmail.value = userDetails.email
     submitBtn.textContent="Update Customer"
@@ -284,6 +283,7 @@ const handleUserUpdate = (userDetails,dataSource)=>{
    
 
 }
+
 // --------------------------------------------------
 // 11. Add both buttons to the actions cell
 // --------------------------------------------------
@@ -364,15 +364,14 @@ const initApp = ()=>{
     const errMsg=  document.querySelector("#err-msg")
     const submitBtn=  document.querySelector("#submit-btn")
     const searchBtn=  document.querySelector("#search")
+    const totalCustomers=  document.querySelector("#total-customers")
     const availableRecords =  document.querySelector("#available-records")
       const formStatus=  document.querySelector("#form-status")
-      if (formStatus==="update") {
-        console,log("Updating user records in progress...")
-        return        
-      }
+    
     errMsg.textContent = ""
     let availbaleCustomers= getCustomersData()
     availableRecords.textContent = `${availbaleCustomers.length}  Matching records.`
+    totalCustomers.textContent = `${availbaleCustomers.length}`
     console.log(availbaleCustomers)
     // ** Render available customers
     renderCustomers(availbaleCustomers)
@@ -389,7 +388,15 @@ const initApp = ()=>{
     })
     customerForm.addEventListener('submit',(e)=>{
         e.preventDefault()
-        const customer =  getCustomers(customerForm)
+        console.log(formStatus.value)
+  if (formStatus.value==="update") {
+        console.log("Updating user records in progress...")
+        console.log(formStatus.value)
+        processUserDetails(e.target,availbaleCustomers)
+        return        
+      }
+      else{
+            const customer =  getCustomers(customerForm)
         console.log(customer)
         // Check if all fields have data
         if (!customer.name || !customer.email) {
@@ -461,10 +468,17 @@ storeCustomers(availbaleCustomers,customer)
 availbaleCustomers =  getCustomersData()
 //    Render the customer data
 renderCustomers(availbaleCustomers)
- availableRecords.textContent = `${availbaleCustomers.length}  Matching records.`
+ availableRecords.textContent = `${availbaleCustomers.length}
+   Matching records.`
+    totalCustomers.textContent = `${availbaleCustomers.length}`
+
 
                                 
-    })
+}
+})
+
+
+    
 
 
 
