@@ -31,7 +31,7 @@ html {
 font-weight: 600;    
 padding: 10px;
 border-bottom: 1px solid #ccc;
-background-color: hsl(var(--primary) / 30%);
+background-color: hsl(var(--primary) / 50%);
 }
 .customer-table .customer-avatar{
    color: hsl(var(--primary) / 10%); 
@@ -58,12 +58,12 @@ padding: 10px!important;
 
 }
 .customer-table tbody tr:nth-child(even):hover{ 
-    background-color: hsl(var(--primary) / 20%);
+    background-color: hsl(var(--primary) / 10%);
     cursor: pointer;
 
 }
 .customer-table tbody tr:nth-child(odd):hover{ 
-    background-color: hsl(var(--primary) / 20%);
+    background-color: hsl(var(--primary) / 10%);
 
 }
 .customer-table .customer-edit-btn{

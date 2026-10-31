@@ -17,7 +17,7 @@ const getCustomersData  =()=>{
         console.log("Processing saved customer details")
     }
 }
-const storeCustomers = (availbaleCustomers,newRecord)=>{
+const storeCustomers = (availbaleCustomers,newRecord=null)=>{
         const customerRecords = [
             newRecord,
             ...availbaleCustomers
@@ -25,6 +25,7 @@ const storeCustomers = (availbaleCustomers,newRecord)=>{
         localStorage.setItem("customerData",JSON.stringify(customerRecords))
 
     }
+const storeUpdatedCustomers = (availbaleCustomers)=>localStorage.setItem("customerData",JSON.stringify(availbaleCustomers))
 const renderCustomers = (customers, { onEdit, onDelete } = {}) => {
     const customerList = document.querySelector("#customerList");
 
@@ -278,8 +279,10 @@ const handleUserUpdate = (userDetails,dataSource)=>{
      formStatus.value ="update"
     customerName.value = userDetails.name
     customerEmail.value = userDetails.email
+    customerEmail.style.cursor = "not-allowed"
+    customerEmail.readOnly= true
+    customerEmail.classList.add("border-red-600")
     submitBtn.textContent="Update Customer"
-    console.log(userDetails)
    
 
 }
@@ -388,11 +391,30 @@ const initApp = ()=>{
     })
     customerForm.addEventListener('submit',(e)=>{
         e.preventDefault()
-        console.log(formStatus.value)
-  if (formStatus.value==="update") {
-        console.log("Updating user records in progress...")
-        console.log(formStatus.value)
-        processUserDetails(e.target,availbaleCustomers)
+  if (formStatus.value==="update") { 
+        const data= processUserDetails(e.target,availbaleCustomers)
+           // Store customer records to local storage
+         storeUpdatedCustomers(data)
+        // refresh the  customer list
+        availbaleCustomers =  getCustomersData()
+      //    Render the customer data
+          renderCustomers(availbaleCustomers)
+          customerForm.reset()
+          formStatus.value = "create"
+    customerEmail.style.cursor = "pointer"
+    customerEmail.readOnly= false
+    customerEmail.classList.remove("border-red-600")
+    errMsg.textContent = "User Updated Successfully!"
+    errMsg.classList.remove("text-red-700","bg-red-50","hidden")
+    errMsg.classList.add("text-green-700","bg-green-50","flex")
+    setTimeout(() => {
+        errMsg.classList.add("text-red-700","bg-red-50","hidden")
+        errMsg.classList.remove("text-green-700","bg-green-50","flex")
+        submitBtn.textContent="Add Customer"
+          customerName.focus()
+          }, 2500);
+
+
         return        
       }
       else{
